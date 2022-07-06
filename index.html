@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Registration</title>
+
+    <!-- google font  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&family=Roboto:wght@100;300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto", sans-serif;
+      }
+      /* css for remove top and down arrow in number type input fields */
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+
+      .authentication-form {
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        border-bottom-right-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+
+      .registartion-title {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: #30a1a7;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: white;
+        border-top-left-radius: 25px;
+        border-top-right-radius: 25px;
+        font-size: 18px;
+      }
+
+      .input-group-container {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        padding-top: 13px;
+      }
+
+      .input-group input {
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #bfbbbb;
+        width: 100%;
+        font-size: 15px;
+      }
+      .input-group i {
+        font-size: 16px;
+        color: #bfbbbb;
+      }
+
+      .input-group select {
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #bfbbbb;
+        width: 100%;
+        font-size: 15px;
+      }
+      #full-name {
+        margin-left: 10px;
+      }
+      #email {
+        margin-left: 5px;
+      }
+      #mobile-number {
+        margin-left: 10px;
+      }
+      #states {
+        margin-left: 15px;
+      }
+      #city-input-field {
+        margin-left: 15px;
+      }
+      #course-input-field {
+        margin-left: 15px;
+      }
+      #specialization-input-field {
+        margin-left: 15px;
+      }
+
+      .button-box {
+        text-align: center;
+      }
+
+      .register-button {
+        padding: 8px 18px;
+        margin-top: 5px;
+        background-color: #f2ad17;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: -150px;
+        text-transform: uppercase;
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+      }
+
+      .disable-button {
+        padding: 8px 18px;
+        margin-top: 5px;
+        background-color: rgb(203, 201, 201);
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        margin-bottom: -150px;
+        text-transform: uppercase;
+        pointer-events: none;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+      }
+
+      .grecaptcha-badge {
+        display: none !important;
+      }
+
+      .error-message {
+        margin-top: 5px;
+        margin-bottom: 0;
+        margin-left: 5px;
+        color: rgb(173, 51, 51);
+        display: none;
+      }
+
+      #api-response-error-message {
+        text-align: center;
+        color: rgb(148, 32, 32);
+        display: none;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* checkbox style */
+      /* The container */
+      .container {
+        display: block;
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 12px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        color: #30a1a7;
+        margin-top: 20px;
+      }
+
+      /* Hide the browser's default checkbox */
+      .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 15px;
+        width: 15px;
+        background-color: #30a1a7;
+        font-size: 18px;
+      }
+
+      /* When the checkbox is checked, add a blue background */
+      .container input:checked ~ .checkmark {
+        background-color: #30a1a7;
+      }
+
+      /* Create the checkmark/indicator (hidden when not checked) */
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+      }
+
+      /* Show the checkmark when checked */
+      .container input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      /* Style the checkmark/indicator */
+      .container .checkmark:after {
+        left: 3px;
+        top: 0;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+
+      .input-fields-container {
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
+      }
+      .image-box {
+        margin-top: -70px;
+      }
+      .bottom-background-image {
+        margin-bottom: -10px;
+        border-bottom-right-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- title -->
+    <h1 class="registartion-title">ENQUIRE NOW</h1>
+    <!-- registration form container-->
+    <div class="authentication-form">
+      <div class="input-fields-container">
+        <!-- first name and -->
+        <div class="input-group">
+          <i class="fa-solid fa-circle-user"></i>
+          <input required id="full-name" type="text" placeholder="Full name" />
+        </div>
+        <!-- error text for full name -->
+        <p id="full-name-error" class="error-message"></p>
+
+        <!-- email input field -->
+        <div class="input-group">
+          <i class="fa-solid fa-envelope-circle-check"></i>
+          <input
+            required
+            id="email"
+            type="email"
+            placeholder="Enter email address"
+          />
+        </div>
+        <!-- error text for email -->
+        <p id="email-error" class="error-message"></p>
+        <!-- mobile number input field -->
+        <div class="input-group">
+          <i class="fa-solid fa-phone"></i>
+          <input
+            required
+            id="mobile-number"
+            type="number"
+            placeholder="Enter mobile number"
+            onkeydown="validateMobileNumber(event)"
+          />
+        </div>
+        <!-- error text for mobile number -->
+        <p id="mobile-number-error" class="error-message"></p>
+        <!-- state and city input field -->
+        <div class="input-group">
+          <i class="fa-solid fa-location-dot"></i>
+          <select required id="states" name="states">
+            <option value="State">State</option>
+          </select>
+        </div>
+        <!-- error text for state -->
+        <p id="state-error" class="error-message"></p>
+        <div class="input-group">
+          <i class="fa-solid fa-location-dot"></i>
+          <select required id="city-input-field" name="cities">
+            <option value="City">City</option>
+          </select>
+        </div>
+        <!-- error text for city -->
+        <p id="city-error" class="error-message"></p>
+        <!-- course input field -->
+        <div class="input-group">
+          <i class="fa-solid fa-clipboard-check"></i>
+          <select
+            required
+            id="course-input-field"
+            class="input-field"
+            name="course"
+          >
+            <option value="Course">Course</option>
+            <option value="BTech in Computer Science and Engineering">
+              BTech in Computer Science and Engineering
+            </option>
+            <option value="MSc in Health Informatics and Analytics">
+              MSc in Health Informatics and Analytics
+            </option>
+          </select>
+        </div>
+        <!-- error text for course -->
+        <p id="course-error" class="error-message"></p>
+
+        <!-- checkbox -->
+        <label class="container"
+          >Agree to receive information
+          <input id="checkbox" type="checkbox" checked />
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <!-- error text for api response error message -->
+      <p id="api-response-error-message"></p>
+      <!-- register button -->
+      <div>
+        <div class="button-box">
+          <button id="register-button" class="disable-button">SUBMIT</button>
+        </div>
+        <div class="image-box">
+          <img
+            class="bottom-background-image"
+            width="100%"
+            height="120px"
+            src="https://somndaaas.s3.ap-south-1.amazonaws.com/button-backgroundcm3g0On81WM4ydN.png"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+    <script>
+      //mobile number validation
+      const validateMobileNumber = (event) => {
+        if (event.keyCode === 69 || event.keyCode === 189) {
+          event.preventDefault();
+        }
+      };
+
+      //recaptcha code
+      // const siteKey = "6LfFENUfAAAAAH4Dh_lx49xi6IqCA1QytPCpkrT5";
+
+      // ! initialize google recaptcha
+      // const loadScriptByURL = (id, url, callback) => {
+      //   const isScriptExist = document.getElementById(id);
+
+      //   if (!isScriptExist) {
+      //     var script = document.createElement("script");
+      //     script.type = "text/javascript";
+      //     script.src = url;
+      //     script.id = id;
+      //     script.onload = function () {
+      //       if (callback) callback();
+      //     };
+      //     document.body.appendChild(script);
+      //   }
+
+      //   if (isScriptExist && callback) callback();
+      // };
+
+      // load the script by passing the URL
+      // loadScriptByURL(
+      //   "recaptcha-key",
+      //   `https://www.google.com/recaptcha/api.js?render=${siteKey}`,
+      //   function () {
+      //     console.log("Script loaded!");
+      //   }
+      // );
+
+      //api base url
+      const apiBaseUrl = "https://prodapollo.shiftboolean.com";
+
+      // college id
+      const collegeId = "628dfd41ef796e8f757a5c13";
+
+      //states, cities, courses variable intialization
+      let states;
+      let cities;
+      let courses;
+
+      //input fields
+      const fullNameField = document.getElementById("full-name");
+      const emailField = document.getElementById("email");
+      const mobileNumberField = document.getElementById("mobile-number");
+      //state select field
+      const stateInputField = document.getElementById("states");
+      const cityInputField = document.getElementById("city-input-field");
+      //course field
+      const courseInputField = document.getElementById("course-input-field");
+
+      //error message field
+      const fullNameError = document.getElementById("full-name-error");
+      const emailError = document.getElementById("email-error");
+      const mobileNumberError = document.getElementById("mobile-number-error");
+      const stateError = document.getElementById("state-error");
+      const cityError = document.getElementById("city-error");
+      const courseError = document.getElementById("course-error");
+
+      const apiResponseErrorBox = document.getElementById(
+        "api-response-error-box"
+      );
+      const apiResponseErrorMessage = document.getElementById(
+        "api-response-error-message"
+      );
+
+      //initialize variables for input fields
+      let state;
+      let city;
+      let selectedState;
+      let stateIsoCode;
+      let course;
+      let singleCourse;
+      let singleSpecialization;
+      let registerInfo;
+
+      //set cities in city field
+      cityInputField.addEventListener("change", (e) => {
+        var selectedCity = e.target.value;
+      });
+
+      //set city name
+      const setCities = (options) => {
+        cities = options;
+        cityInputField.innerHTML = `<option value="City">City</option>`;
+        options.forEach((option) => {
+          cityInputField.innerHTML +=
+            "<option value='" + option.name + "'>" + option?.name + "</option>";
+        });
+        checkError();
+      };
+
+      //state field on change event function
+      stateInputField.addEventListener("change", (e) => {
+        selectedState = e.target.value;
+        const state = states.find((state) =>
+          state.name.includes(selectedState)
+        );
+
+        stateIsoCode = state?.iso2;
+
+        if (state?.iso2) {
+          fetch(`${apiBaseUrl}/countries/IN/states/${state?.iso2}/cities`)
+            .then((res) => res.json())
+            .then((data) => {
+              setCities(data);
+            });
+        }
+      });
+
+      //set state name
+      const setState = (options) => {
+        states = options;
+        options.forEach((option) => {
+          stateInputField.innerHTML +=
+            "<option value='" + option.name + "'>" + option?.name + "</option>";
+        });
+      };
+
+      //fetch states
+      const fetchStates = () => {
+        fetch(`${apiBaseUrl}/countries/IN/states/`)
+          .then((res) => res.json())
+          .then((data) => {
+            setState(data);
+          });
+      };
+
+      fetchStates();
+
+      //course field onchange event function
+      courseInputField.addEventListener("change", (e) => {
+        var selectedCourse = e.target.value;
+
+        const courseAndSpecializationArray = selectedCourse?.split(" in ");
+        singleCourse = courseAndSpecializationArray[0];
+        singleSpecialization = courseAndSpecializationArray[1];
+      });
+
+      // recaptcha with signup handler function
+      const handleSignUp = () => {
+        // window.grecaptcha?.ready(() => {
+        //   window.grecaptcha
+        //     .execute(siteKey, { action: "submit" })
+        //     .then((captchaToken) => {
+        // submitDataForSignup(captchaToken);
+        submitDataForSignup();
+        //     });
+        // });
+      };
+
+      //name validation regex
+      const nameFormat = /^[A-Za-z.\s]+$/;
+
+      //email validation regex
+      const mailFormat =
+        /^[\w%\+\-]+(\.[\w%\+\-]+)*@[\w%\+\-]+?\.[a-zA-Z]{2,3}$/;
+
+      const recaptchaApi = `${apiBaseUrl}/student_user_crud/verify_captcha/`;
+
+      //register button
+      const registerButton = document.getElementById("register-button");
+
+      //checking error in input field
+      let fullNameErrorMessage;
+      let emailErrorMessage;
+      let mobilleNoErrorMessage;
+      let stateErrorMessage;
+      let cityErrorMessage;
+      let courseErrorMessage;
+
+      const checkError = () => {
+        if (
+          fullNameErrorMessage?.length === 0 &&
+          emailErrorMessage?.length === 0 &&
+          mobilleNoErrorMessage?.length === 0 &&
+          stateErrorMessage?.length === 0 &&
+          stateInputField.value !== "State" &&
+          stateInputField.value?.length > 0 &&
+          cityErrorMessage?.length === 0 &&
+          cityInputField.value !== "City" &&
+          cityInputField.value?.length > 0 &&
+          courseErrorMessage?.length === 0 &&
+          courseInputField.value !== "Course" &&
+          courseInputField.value?.length > 0
+        ) {
+          //checkbox field
+          document.getElementById("checkbox").checked = true;
+          document.getElementById("checkbox").removeAttribute("disabled");
+          registerButton.classList.remove("disable-button");
+          registerButton.classList.add("register-button");
+        } else {
+          document.getElementById("checkbox").checked = false;
+          document.getElementById("checkbox").setAttribute("disabled", true);
+          registerButton.classList.remove("register-button");
+          registerButton.classList.add("disable-button");
+        }
+      };
+      checkError();
+
+      //checkbox
+      document.getElementById("checkbox").addEventListener("change", (e) => {
+        if (e.target.checked === true) {
+          registerButton.classList.remove("disable-button");
+          registerButton.classList.add("register-button");
+          document.getElementById("checkbox").checked = true;
+        } else {
+          registerButton.classList.remove("register-button");
+          registerButton.classList.add("disable-button");
+          document.getElementById("checkbox").checked = false;
+        }
+      });
+
+      //full name onchange error validation
+      fullNameField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value.length >= 1 && nameFormat.test(value) === false) {
+          //add full name error
+          fullNameError.innerText =
+            "Special characters and numbers are not allowed";
+          fullNameError.style.display = "block";
+          fullNameErrorMessage =
+            "Special characters and numbers are not allowed";
+          apiResponseErrorMessage.style.display = "none";
+        } else if (value.length < 2) {
+          //add full name error
+          fullNameError.innerText = "First name has at least 2 characters";
+          fullNameError.style.display = "block";
+          fullNameErrorMessage = "First name has at least 2 characters";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          fullNameErrorMessage = "";
+          fullNameError.style.display = "none";
+        }
+        checkError();
+      });
+
+      //mobile number onchange error validation
+      emailField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (mailFormat.test(value) === false) {
+          emailError.innerText = "Please provide a valid email address";
+          emailError.style.display = "block";
+          emailErrorMessage = "Please provide a valid email address";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          emailError.style.display = "none";
+          emailErrorMessage = "";
+        }
+        checkError();
+      });
+
+      //mobile number onchange error validation
+      mobileNumberField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value.length !== 10) {
+          //add mobile number error
+          mobileNumberError.innerText = "Mobile number must be 10 digit";
+          mobileNumberError.style.display = "block";
+          mobilleNoErrorMessage = "Mobile number must be 10 digit";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          mobileNumberError.style.display = "none";
+          mobilleNoErrorMessage = "";
+        }
+        checkError();
+      });
+
+      //state name validation
+      stateInputField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value === "State") {
+          stateError.innerText = "Please select your state";
+          stateError.style.display = "block";
+          stateErrorMessage = "Please select your state";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          stateError.style.display = "none";
+          stateErrorMessage = "";
+        }
+        checkError();
+      });
+
+      //city name validation
+      cityInputField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value === "City") {
+          cityError.innerText = "Please select your city";
+          cityError.style.display = "block";
+          cityErrorMessage = "Please select your city";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          cityError.style.display = "none";
+          cityErrorMessage = "";
+        }
+        checkError();
+      });
+
+      //course name validation
+      courseInputField.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (value === "Course") {
+          //add course error
+          courseError.innerText = "Please select your course";
+          courseError.style.display = "block";
+          courseErrorMessage = "Please select your course";
+          apiResponseErrorMessage.style.display = "none";
+        } else {
+          courseError.style.display = "none";
+          courseErrorMessage = "";
+        }
+        checkError();
+      });
+
+      // const submitDataForSignup = (captchaToken) => {
+      const submitDataForSignup = () => {
+        //* call a backend API to verify reCAPTCHA response
+        // fetch(recaptchaApi, {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     response: captchaToken,
+        //   }),
+        // })
+        //   .then((res) => res.json())
+        //   .then((res) => {
+        //     if (res?.message === "Human is found.") {
+        // remove api response error message
+        apiResponseErrorMessage.style.display = "none";
+        //input fields validation
+        if (fullName.length >= 1 && nameFormat.test(fullName) === false) {
+          //add name error
+          fullNameError.innerText =
+            "Special characters and numbers are not allowed";
+          fullNameError.style.display = "block";
+        } else if (fullName.length < 2) {
+          //add name error
+          fullNameError.innerText = "First name has at least 2 characters";
+          fullNameError.style.display = "block";
+        } else if (mailFormat.test(email) === false) {
+          // remove name error
+          fullNameError.style.display = "none";
+          //add email error
+          emailError.innerText = "Please provide a valid email address";
+          emailError.style.display = "block";
+        } else if (mobileNumber.length !== 10) {
+          // remove name and email error
+          fullNameError.style.display = "none";
+          emailError.style.display = "none";
+          //add mobile number error
+          mobileNumberError.innerText = "Mobile number must be 10 digit";
+          mobileNumberError.style.display = "block";
+        } else if (stateIsoCode === undefined || selectedState === "State") {
+          // remove name, email and mobile number error
+          fullNameError.style.display = "none";
+          emailError.style.display = "none";
+          mobileNumberError.style.display = "none";
+          //add state error
+          stateInputField.classList.add("invalid-input");
+          stateError.innerText = "Please select your state";
+          stateError.style.display = "block";
+        } else if (city === "City") {
+          // remove name, email and mobile number, state error
+          fullNameError.style.display = "none";
+          emailError.style.display = "none";
+          mobileNumberError.style.display = "none";
+          stateError.style.display = "none";
+          //add city error
+          cityError.innerText = "Please select your city";
+          cityError.style.display = "block";
+        } else if (
+          course === "Course" ||
+          singleCourse === undefined ||
+          singleCourse === "Course"
+        ) {
+          // remove name, email and mobile number, state, city error
+          fullNameError.style.display = "none";
+          emailError.style.display = "none";
+          mobileNumberError.style.display = "none";
+          stateError.style.display = "none";
+          cityError.style.display = "none";
+          //add course error
+          courseError.innerText = "Please select your course";
+          courseError.style.display = "block";
+        } else {
+          // remove name, email and mobile number, state, city, course,specialization error
+          fullNameError.style.display = "none";
+          emailError.style.display = "none";
+          mobileNumberError.style.display = "none";
+          stateError.style.display = "none";
+          cityError.style.display = "none";
+          courseError.style.display = "none";
+
+          //fetch sign up api
+          fetch(`${apiBaseUrl}/student_user_crud/signup`, {
+            method: "POST",
+            headers: {
+              accept: "application/json",
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(registerInfo),
+          })
+            .then((res) => res.json())
+            .then((result) => {
+              //if signup successfull
+              if (result.code === 200) {
+                window.open(
+                  "https://apollouniversity.edu.in/admissions22/thankyou.html",
+                  "_parent"
+                );
+                //clear input fields value
+                fullNameField.value = "";
+                emailField.value = "";
+                mobileNumberField.value = "";
+                stateInputField.value = "";
+                cityInputField.value = "";
+                courseInputField.value = "";
+              } //show the error message
+              else if (result?.detail) {
+                apiResponseErrorMessage.innerText = result?.detail;
+                apiResponseErrorMessage.style.display = "block";
+              }
+            })
+            .catch((error) => {
+              console.log(error.message);
+            });
+        }
+        //   } else {
+        //     window.open(
+        //       "https://dashboard.apollouniversity.edu.in",
+        //       "_parent"
+        //     );
+        //   }
+        // })
+        // .catch((error) => {
+        //   console.log(error.message);
+        // });
+      };
+
+      // get search url details
+      var url = new URL(window.location.href);
+
+      //register button onclick handler
+      registerButton.addEventListener("click", function () {
+        //getting input fields value
+        fullName = fullNameField.value;
+        email = emailField.value;
+        mobileNumber = mobileNumberField.value;
+        state = stateInputField.value;
+        city = cityInputField.value;
+        course = courseInputField.value;
+
+        //register info object for post api
+        registerInfo = {
+          full_name: fullName,
+          email: email,
+          mobile_number: mobileNumber,
+          country_code: "IN",
+          state_code: stateIsoCode,
+          city: city,
+          course: singleCourse,
+          main_specialization: singleSpecialization,
+          college_id: collegeId,
+          utm_source: url.searchParams.get("utm_source")
+            ? url.searchParams.get("utm_source")
+            : "",
+          utm_campaign: url.searchParams.get("utm_campaign")
+            ? url.searchParams.get("utm_campaign")
+            : "",
+          utm_keyword: url.searchParams.get("utm_keyword")
+            ? url.searchParams.get("utm_keyword")
+            : "",
+          utm_medium: url.searchParams.get("utm_medium")
+            ? url.searchParams.get("utm_medium")
+            : "",
+          referal_url: url.searchParams.get("referal_url")
+            ? url.searchParams.get("referal_url")
+            : "",
+        };
+        // signup function call
+        handleSignUp();
+      });
+    </script>
+    <script
+      src="https://kit.fontawesome.com/a4b0780a32.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
